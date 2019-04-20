@@ -4,11 +4,7 @@ To control write access, `DMap`s keep a reference to their owner *in code*. This
 
 ![A picture of a DMap](https://dapphub.github.io/dmap/dmap.png)
 
-`DMap`s are constructed by the `DMapFactory` object, which also logs build events.
-
-`DMapDapp` is a contract with a normal ABI, compatible with Solidity. It has some utility methods for reading `DMap`s and working with a small selection of standard DMap controller contracts called `ControlPanel`s.
-
-`DMap`s are simple to statically analyze; `isDMap` and `getOwner` utility functions are implemented with `GETCODE` and some mask/compares.
+`DMap`s are constructed by the `DMapFactory` object.
 
 
 ### Semantics
