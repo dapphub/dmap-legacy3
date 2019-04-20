@@ -1,32 +1,13 @@
-73    // PUSH20 ...           S: owner
-00 00
-00 00
-00 00
-00 00
-00 00
-00 00
-00 00
-00 00
-00 00
-00 00
-33    // CALLER               S: owner, caller   
-14    // EQ                   S: (owner == caller)
-60 27 // PUSH1 dest 0x27==39  S: (owner == caller), if_dest
-57    // JUMPI                S: 
-      //   false case         S:
-60 00 //     PUSH1 0          S: 0
-35    //     CALLDATALOAD     S: word0
-54    //     SLOAD            S: storage[word0]
-60 00 //     PUSH1 0          S: storage[word0], 0
-52    //     MSTORE           S:              (memory[0] = storage[word0])
-60 20 //     PUSH1 32         S: 32
-60 00 //     PUSH1 0          S: 32, 0
-F3    //     RETURN           S:            (return memory[0:32]
-5B    // dest                 S:
-      //   true case
-60 20 //     PUSH1 32         S: 32
-35    //     CALLDATALOAD     S: word1
-60 00 //     PUSH1 0          S: word1, 0
-35    //     CALLDATALOAD     S: word1, word0
-55    //     SSTORE           S: 
-00    //     STOP
+reject ETH
+
+
+
+if calldata is 1 word, we are getting
+   return storage[arg0]
+if calldata is 2 words, we are setting
+   check admin
+else error   
+
+
+
+
