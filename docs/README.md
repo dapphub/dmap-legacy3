@@ -1,12 +1,17 @@
 A `DMap` is a contract whose storage is used directly as a mapping.
 
-To control write access, `DMaps` keep a reference to their owner *in code*. This means the owner does not take up a storage slot and cannot be modified.
+To control write access, `DMap`s keep a reference to their owner *in code*. This means the owner does not take up a storage slot and cannot be modified.
+
+`DMap`s are constructed by the `DMapFactory` object, which also logs build events.
+
+Finally, `DMapDapp` is a contract with a normal ABI, compatible with Solidity. It has some utility methods for reading `DMap`s and working with a small selection of standard DMap controller contracts called `ControlPanel`s.
 
 `DMap`s are simple to statically analyze; `isDMap` and `getOwner` utility functions are implemented with `GETCODE` and some mask/compares.
 
 
-#### Semantics
+### Semantics
 
+#### `DMap`
 ```
 ERR_BAD_ETHER    = 0x1;
 ERR_BAD_DATA     = 0x2;
@@ -19,6 +24,10 @@ ERR_BAD_CALLER   = 0x4; // 2^3, not 3
 * If a DMap is called with a calldata of length 64 (two words), and the caller is NOT the hard-coded owner, the call will revert with error code `ERR_BAD_CALLER`.
 * If a DMap is called with calldata of length other than 32 or 64, the call will revert with error `ERR_BAD_DATA`.
 
+#### `DMapFactory`
+```
+ERR_BAD_ETHER  = 0x1;
+```
 
 
 ```
