@@ -4,7 +4,7 @@ To control write access, `DMap`s keep a reference to their owner *in code*. This
 
 `DMap`s are constructed by the `DMapFactory` object, which also logs build events.
 
-Finally, `DMapDapp` is a contract with a normal ABI, compatible with Solidity. It has some utility methods for reading `DMap`s and working with a small selection of standard DMap controller contracts called `ControlPanel`s.
+`DMapDapp` is a contract with a normal ABI, compatible with Solidity. It has some utility methods for reading `DMap`s and working with a small selection of standard DMap controller contracts called `ControlPanel`s.
 
 `DMap`s are simple to statically analyze; `isDMap` and `getOwner` utility functions are implemented with `GETCODE` and some mask/compares.
 
@@ -19,16 +19,24 @@ ERR_BAD_CALLER   = 0x4; // 2^3, not 3
 ```
 
 * If a DMap is called with nonzero `msg.value`, the call will revert with error `ERR_BAD_ETHER`.
-* If a DMap is called with a calldata of length 32 (one word), the return data will be the 32 bytes (one word) in the storage slot whose key is the argument, ie `return storage[arg0]`.
-* If a DMap is called with a calldata of length 64 (two words), and the caller is the hard-coded owner, the storage at the location of the first word (word 0, calldata[0:31]) will be set to the second word (word 1, calldata[32:63]), ie `storage[arg0] = arg1`. The return data will be empty.
-* If a DMap is called with a calldata of length 64 (two words), and the caller is NOT the hard-coded owner, the call will revert with error code `ERR_BAD_CALLER`.
+* If a DMap is called with calldata of length 32 (one word), the return data will be the 32 bytes (one word) in the storage slot whose key is the argument, ie `return storage[arg0]`.
+* If a DMap is called with calldata of length 64 (two words), and the caller is the hard-coded owner, the storage at the location of the first word (word 0, calldata[0:31]) will be set to the second word (word 1, calldata[32:63]), ie `storage[arg0] = arg1`. The return data will be empty.
+* If a DMap is called with calldata of length 64 (two words), and the caller is NOT the hard-coded owner, the call will revert with error code `ERR_BAD_CALLER`.
 * If a DMap is called with calldata of length other than 32 or 64, the call will revert with error `ERR_BAD_DATA`.
 
 #### `DMapFactory`
 ```
-ERR_BAD_ETHER  = 0x1;
+ERR_BAD_ETHER    = 0x1;
+ERR_BAD_DATA     = 0x2;
 ```
 
+* If a DMapFactory is called with nonzero `msg.value`, the call will revert with error `ERR_BAD_ETHER`.
+* If a DMapFactory is called with calldata of length not equal to 0 or 32, the call will revert with error `ERR_BAD_DATA`.
+* If a DMapFactory is called with calldata of length 0, the return value will be the address of a new `DMap` whose owner is the *caller*.
+* If a DMapFactory is called with calldata of length 32, the return value will be the address ofa new `DMap` whose owner is bytes 12-32 of the calldata (ie, the argument is "masked" when extracted from calldata and injected into new contract code). *Note that the argument is NOT masked and is used as an indexed topic, so the caller can use these 12 bytes as extra log data.*
+* 
+
+### Pseudocode
 
 ```
 // THIS IS NOT THE SOURCE CODE FOR DMAP
