@@ -1,6 +1,6 @@
 PUSH1 0x0       # 0x0
 VALUE           # 0x0, val 
-GT              # (val > 0x0)      mind stack orientation
+GT              # (val > 0x0)
 PUSH1 0xXX      # (val > 0x0), destBADVALUE
 JUMPI           #
 
@@ -51,22 +51,20 @@ CALDATALOAD     # arg1
 PUSH1 0x0       # arg1, 0x0
 CALLDATALOAD    # arg1, arg0
 SSTORE          #
-PUSH1 0x0       # 0x0
-PUSH1 0x0       # 0x0, 0x0
-RETURN          #
+STOP            # 
 
 JUMPDEST        ### destBADVALUE
 PUSH1 0x1       # 0x1
 PUSH1 0xXX      # 0x1, destRevert
 JUMP            # 0x1
 
-JUMPDEST        ### destBADCALLER
+JUMPDEST        ### destBADDATA
 PUSH1 0x2       # 0x2
 PUSH1 0xXX      # 0x2, destRevert
 JUMP            # 0x2
 
-JUMPDEST        ### destBADDATA
-PUSH1 0x4       # 0x4
+JUMPDEST        ### destBADCALLER
+PUSH1 0x2       # 0x4
 PUSH1 0xXX      # 0x4, destRevert
 JUMP            # 0x4
 
