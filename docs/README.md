@@ -40,15 +40,11 @@ contract DMap {
     // To `get`, send 1 word: `key`. Response is 1 word: `value`.
     // To `set`, send 2 words: `key,val`. Response is empty.
     function() external {
-        if( msg.data[3] == 0 ){
+        if( msg.data.length == 1 ){
             return storage[0];
         } else {
+            assert(msg.sender == owner);
             storoage[word0] = word1;
-        }
-        if (msg.sender == owner) {
-            _storage[word0] = bytes32(msg.data[0]); // PSUEDOCODE - write whole word
-        } else {
-            return bytes32(_storage[word0]);        // PSEUDOCODE - read whole word
         }
     }
 }
