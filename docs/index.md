@@ -13,7 +13,7 @@ To control write access, `DMap`s keep a reference to their owner *in code*. This
 ```
 ERR_BAD_ETHER    = 0x1;
 ERR_BAD_DATA     = 0x2;
-ERR_BAD_CALLER   = 0x4; // 2^3, not 3
+ERR_BAD_CALLER   = 0x4; // not 3
 ```
 
 * If a DMap is called with nonzero `msg.value`, the call will revert with error `ERR_BAD_ETHER`.
