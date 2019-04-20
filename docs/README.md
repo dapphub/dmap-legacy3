@@ -32,8 +32,8 @@ ERR_BAD_DATA     = 0x2;
 
 * If a DMapFactory is called with nonzero `msg.value`, the call will revert with error `ERR_BAD_ETHER`.
 * If a DMapFactory is called with calldata of length not equal to 0 or 32, the call will revert with error `ERR_BAD_DATA`.
-* If a DMapFactory is called with calldata of length 0, the return value will be the address of a new `DMap` whose owner is the *caller*.
-* If a DMapFactory is called with calldata of length 32, the return value will be the address ofa new `DMap` whose owner is bytes 12-32 of the calldata (ie, the argument is "masked" when extracted from calldata and injected into new contract code). *Note that the argument is NOT masked and is used as an indexed topic, so the caller can use these 12 bytes as extra log data.*
+* If a DMapFactory is called with calldata of length 0, the return value will be the address of a new `DMap` whose **owner is the caller**.
+* If a DMapFactory is called with calldata of length 32, the return value will be the address ofa new `DMap` whose **owner is bytes 12-32 of the calldata** (ie, the argument is "masked" when extracted from calldata and injected into new contract code). *Note that the argument is NOT masked when it is used as an indexed topic in the `log`, which means the caller can use these 12 bytes as extra log data.*
 * 
 
 ### Pseudocode
@@ -57,11 +57,23 @@ contract DMap {
     // To `get`, send 1 word: `key`. Response is 1 word: `value`.
     // To `set`, send 2 words: `key,val`. Response is empty.
     function() external {
-        if( msg.data.length == 1 ){
-            return storage[0];
-        } else {
+        if( msg.data.length == 32 ){
+            return storage[calldata[0:31]];
+        } else if (msg.data.length == 64) {
             assert(msg.sender == owner);
-            storoage[word0] = word1;
+            storage[calldata[0:31]] = calldata[32:63];
+        } else {
+            throw;
+        }
+    }
+}
+
+contract DMapFactory {
+    function() {
+        if( msg.data.length == 0 ) {
+            return new DMap(msg.sender);
+        } else if (msg.data.length == 32) {
+            return new DMap(calldata[12:32]);
         }
     }
 }
