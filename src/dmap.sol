@@ -1,3 +1,6 @@
+// See dmap.evm
+// This solidity is not intended to work!
+
 pragma solidity ^0.5.6;
 
 // Solidity functionally equivalent quasicode
