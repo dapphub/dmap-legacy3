@@ -38,7 +38,7 @@ contract DMap {
     }
   
     // To `get`, send 1 word: `key`. Response is 1 word: `value`.
-    // To `set`, send 3 words: `key,val,nonzero`. Response is empty.
+    // To `set`, send 2 words: `key,val`. Response is empty.
     function() external {
         if( msg.data[3] == 0 ){
             return storage[0];
