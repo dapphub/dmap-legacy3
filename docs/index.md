@@ -2,7 +2,7 @@ A `DMap` is a contract whose storage is used directly as a mapping.
 
 To control write access, `DMap`s keep a reference to their owner *in code*. This means the owner does not take up a storage slot and cannot be modified.
 
-![A picture of a DMap.](https://dapphub.github.io/dmap/dmap.png)
+![A picture of a DMap](https://dapphub.github.io/dmap/dmap.png)
 
 `DMap`s are constructed by the `DMapFactory` object, which also logs build events.
 
