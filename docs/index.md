@@ -2,6 +2,8 @@ A `DMap` is a contract whose storage is used directly as a mapping.
 
 To control write access, `DMap`s keep a reference to their owner *in code*. This means the owner does not take up a storage slot and cannot be modified.
 
+![A picture of a DMap.](https://dapphub.github.io/dmap/dmap.png)
+
 `DMap`s are constructed by the `DMapFactory` object, which also logs build events.
 
 `DMapDapp` is a contract with a normal ABI, compatible with Solidity. It has some utility methods for reading `DMap`s and working with a small selection of standard DMap controller contracts called `ControlPanel`s.
