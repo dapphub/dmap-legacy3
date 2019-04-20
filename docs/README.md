@@ -20,7 +20,7 @@ ERR_BAD_CALLER   = 0x4; // 2^3, not 3
 
 * If a DMap is called with nonzero `msg.value`, the call will revert with error `ERR_BAD_ETHER`.
 * If a DMap is called with calldata of length 32 (one word), the return data will be the 32 bytes (one word) in the storage slot whose key is the argument, ie `return storage[arg0]`.
-* If a DMap is called with calldata of length 64 (two words), and the caller is the hard-coded owner, the storage at the location of the first word (word 0, calldata[0:31]) will be set to the second word (word 1, calldata[32:63]), ie `storage[arg0] = arg1`. The return data will be empty.
+* If a DMap is called with calldata of length 64 (two words), and the caller is the hard-coded owner, the storage at the location of the first word (word 0, calldata[0:31]) will be set to the second word (word 1, calldata[32:63]), ie `storage[arg0] = arg1`. The return data will be empty (length 0).
 * If a DMap is called with calldata of length 64 (two words), and the caller is NOT the hard-coded owner, the call will revert with error code `ERR_BAD_CALLER`.
 * If a DMap is called with calldata of length other than 32 or 64, the call will revert with error `ERR_BAD_DATA`.
 
