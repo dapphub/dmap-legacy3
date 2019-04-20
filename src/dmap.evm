@@ -1,13 +1,78 @@
-reject ETH
+PUSH1 0x0       # 0x0
+VALUE           # 0x0, val 
+GT              # (val > 0x0)      mind stack orientation
+PUSH1 0xXX      # (val > 0x0), destBADVALUE
+JUMPI           #
 
+CALLDATASIZE    # calldatasize
+PUSH1 0x20      # calldatasize, 0x20
+EQ              # (calldatasize == 0x20)
+PUSH1 0xXX      # (calldatsize == 0x20), destGET
+JUMPI
 
+CALLDATASIZE    # calldatasize
+PUSH1 0x40      # calldatasize, 0x40
+EQ              # (calldatasize == 0x40)
+PUSH1 0xXX      # (calldatasize == 0x40), destSET
+JUMPI           #
 
-if calldata is 1 word, we are getting
-   return storage[arg0]
-if calldata is 2 words, we are setting
-   check admin
-else error   
+PUSH1 0xXX      # destBADDATA
+JUMP            #
 
+JUMPDEST        ### destGET
+PUSH1 0x0       # 0x0
+CALLDATALOAD    # arg0
+SLOAD           # val0
+PUSH1 0x0       # val0, offset(0)
+MSTORE          # 
+PUSH1 0x20      # length(32)
+PUSH1 0x0       # length(32), offset(0)
+RETURN          #
 
+JUMPDEST        ### destSET
+PUSH20          # owner
+ FF FF
+ FF FF
+ FF FF
+ FF FF
+ FF FF
+ FF FF
+ FF FF
+ FF FF
+ FF FF
+ FF FF
+CALLER          # owner, caller
+EQ              # (owner == caller)
+NOT             # (owner != caller)
+PUSH1 0xXX      # (owner != caller), destBADCALLER
+JUMPI           #
+PUSH1 0x1       # 0x1
+CALDATALOAD     # arg1
+PUSH1 0x0       # arg1, 0x0
+CALLDATALOAD    # arg1, arg0
+SSTORE          #
+PUSH1 0x0       # 0x0
+PUSH1 0x0       # 0x0, 0x0
+RETURN          #
 
+JUMPDEST        ### destBADVALUE
+PUSH1 0x1       # 0x1
+PUSH1 0xXX      # 0x1, destRevert
+JUMP            # 0x1
 
+JUMPDEST        ### destBADCALLER
+PUSH1 0x2       # 0x2
+PUSH1 0xXX      # 0x2, destRevert
+JUMP            # 0x2
+
+JUMPDEST        ### destBADDATA
+PUSH1 0x4       # 0x4
+PUSH1 0xXX      # 0x4, destRevert
+JUMP            # 0x4
+
+JUMPDEST        ### destREVERT  (requires: errcode)
+PUSH1 0x0       # errcode, 0x0
+MSTORE          #
+PUSH1 0x1       # 0x1
+PUSH1 0x0       # 0x1, 0x0
+REVERT          #
