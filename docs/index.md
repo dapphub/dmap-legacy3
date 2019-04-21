@@ -29,13 +29,18 @@ emit( bytes32 indexed key
 ```
 ERR_BAD_ETHER    = 0x1;
 ERR_BAD_DATA     = 0x2;
+
+emit( address indexed dmap
+    , address indexed owner
+    , address indexed caller
+    , bytes12 indexed tag
+    ) anonymous;
 ```
 
 * If a DMapFactory is called with nonzero `msg.value`, the call will revert with error `ERR_BAD_ETHER`.
 * If a DMapFactory is called with calldata of length not equal to 0 or 32, the call will revert with error `ERR_BAD_DATA`.
 * If a DMapFactory is called with calldata of length 0, the return value will be the address of a new `DMap` whose **owner is the caller**.
 * If a DMapFactory is called with calldata of length 32, the return value will be the address ofa new `DMap` whose **owner is bytes 12-32 of the calldata** (ie, the argument is "masked" when extracted from calldata and injected into new contract code). *Note that the argument is NOT masked when it is used as an indexed topic in the `log`, which means the caller can use these 12 bytes as extra log data.*
-* 
 
 ### Pseudocode
 
