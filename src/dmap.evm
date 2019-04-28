@@ -8,39 +8,39 @@
 # OWNER/START
 # OWNER/END
 
-60 0x0       # PUSH1        | 0x0
+60 00        # PUSH1        | 0x0
 34           # CALLVALUE    | 0x0, val 
 11           # GT           | (val > 0x0)
-60 0xXX      # PUSH1        | (val > 0x0), destBADVALUE
+60 XX        # PUSH1        | (val > 0x0), destBADVALUE
 57           # JUMPI        |
 
 36           # CALLDATASIZE | calldatasize
-60 0x20      # PUSH1        | calldatasize, 0x20
+60 20        # PUSH1        | calldatasize, 0x20
 14           # EQ           | (calldatasize == 0x20)
-60 0xXX      # PUSH1        | (calldatsize == 0x20), destGET
+60 XX        # PUSH1        | (calldatsize == 0x20), destGET
 57           # JUMPI        |
 
 36           # CALLDATASIZE | calldatasize
-60 0x40      # PUSH1 0x40   | calldatasize, 0x40
+60 40        # PUSH1 0x40   | calldatasize, 0x40
 14           # EQ           | (calldatasize == 0x40)
-60 0xXX      # PUSH1 0xXX   | (calldatasize == 0x40), destSET
+60 XX        # PUSH1 0xXX   | (calldatasize == 0x40), destSET
 57           # JUMPI
 
-60 0xXX      # PUSH1 0xXX   | destBADDATA
+60 XX        # PUSH1 0xXX   | destBADDATA
 56           # JUMP
 
 5B         ### JUMPDEST.GET
-60 0x0       # PUSH1 0x0    | 0x0
+60 00        # PUSH1 0x0    | 0x0
 35           # CALLDATALOAD | arg0
 54           # SLOAD        | val0
-60 0x0       # PUSH1 0x0    | PUSH1 val0, offset(0)
+60 00        # PUSH1 0x0    | PUSH1 val0, offset(0)
 52           # MSTORE       |
-60 0x20      # PUSH1 length(32)
-60 0x0       # PUSH1 0x0    | PUSH1 length(32), offset(0)
+60 20        # PUSH1 length(32)
+60 00        # PUSH1 0x0    | PUSH1 length(32), offset(0)
 F3           # RETURN
 
 5B        ### JUMPDEST.SET
-73          # PUSH20 <addr> | owner
+73           # PUSH20 <addr> | owner
  FF FF
  FF FF
  FF FF
@@ -54,11 +54,11 @@ F3           # RETURN
 33           # CALLER       | owner, caller
 14           # EQ           | (owner == caller)
 19           # NOT          | (owner != caller)
-60 0xXX      # PUSH1 0xXX   | (owner != caller), destBADCALLER
+60 XX        # PUSH1 0xXX   | (owner != caller), destBADCALLER
 57           # JUMPI        |
-60 0x1       # PUSH1 0x0    | 0x1
+60 01        # PUSH1 0x01   | 0x1
 35           # CALLDATALOAD | arg1
-60 0x0       # PUSH1 0x0    | arg1, 0x0
+60 00        # PUSH1 0x00   | arg1, 0x0
 35           # CALLDATALOAD | arg1, arg0
 55           # SSTORE
              # TODO log2(key, val)
@@ -67,23 +67,23 @@ F3           # RETURN
 00           # STOP         | 
 
 5B         ### destBADVALUE
-60 0x1       # PUSH1 0x1    | 0x1
-60 0xXX      # PUSH1 0xXX   | 0x1, destRevert
-56           # JUMP | 0x1
+60 01        # PUSH1 0x0    | 0x1
+60 XX        # PUSH1 0xXX   | 0x1, destRevert
+56           # JUMP         | 0x1
 
 5B         ### destBADDATA
-60 0x2       # PUSH1 0x2    | 0x2
-60 0xXX      # PUSH1 0x2    | 0x2, destRevert
-56           # JUMP | 0x2
+60 02       # PUSH1 0x2    | 0x2
+60 XX       # PUSH1 0xXX   | 0x2, destRevert
+56          # JUMP         | 0x2
 
 5B         ### destBADCALLER
-60 0x4       # PUSH1 0x4    | 0x4
-60 0xXX      # PUSH1 0xXX   | 0x4, destRevert
-56           # JUMP | 0x4
+60 04        # PUSH1 0x4    | 0x4
+60 XX        # PUSH1 0xXX   | 0x4, destRevert
+56           # JUMP         | 0x4
 
 5B         ### destREVERT  (requires: errcode)
-60 0x0       # PUSH1 0x0    | errcode, 0x0
+60 00        # PUSH1 0x0    | errcode, 0x0
 52           # MSTORE
-60 0x1       # PUSH1 0x1    | 0x1
-60 0x0       # PUSH1 0x1    | 0x1, 0x0
+60 01        # PUSH1 0x1    | 0x1
+60 00        # PUSH1 0x0    | 0x1, 0x0
 FD           # REVERT
