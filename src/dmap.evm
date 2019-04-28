@@ -34,8 +34,8 @@
 54           # SLOAD        | val0
 60 00        # PUSH1 0x0    | PUSH1 val0, offset(0)
 52           # MSTORE       |
-60 20        # PUSH1 length(32)
-60 00        # PUSH1 0x0    | PUSH1 length(32), offset(0)
+60 20        # PUSH1 32     | 0x20
+60 00        # PUSH1 0x0    | 0x20, 0x00
 F3           # RETURN
 
 5B         ### DEST.SET
@@ -53,7 +53,7 @@ F3           # RETURN
 33           # CALLER       | owner, caller
 14           # EQ           | (owner == caller)
 19           # NOT          | (owner != caller)
-60 NN        # PUSH1 0xXX   | (owner != caller), DEST.BADCALLER
+60 NN        # PUSH1 0xNN   | (owner != caller), DEST.BADCALLER
 57           # JUMPI        |
 60 01        # PUSH1 0x01   | 0x1
 35           # CALLDATALOAD | arg1
@@ -67,7 +67,7 @@ A2           # LOG2         | arg, arg0
 55           # SSTORE       | 
 00           # STOP         | 
 
-5B         ### 
+5B         ### DEST.BADVALUE
 60 01        # PUSH1 0x0    | 0x1
 60 RR        # PUSH1 0xRR   | 0x1, DEST.REVERT
 56           # JUMP         | 0x1
