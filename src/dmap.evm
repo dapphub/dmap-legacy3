@@ -1,36 +1,36 @@
-PUSH1 0x0       # 0x0
-VALUE           # 0x0, val 
-GT              # (val > 0x0)
-PUSH1 0xXX      # (val > 0x0), destBADVALUE
-JUMPI           #
+60 0x0       # PUSH1        | 0x0
+34           # CALLVALUE    | 0x0, val 
+11           # GT           | (val > 0x0)
+60 0xXX      # PUSH1        | (val > 0x0), destBADVALUE
+57           # JUMPI        |
 
-CALLDATASIZE    # calldatasize
-PUSH1 0x20      # calldatasize, 0x20
-EQ              # (calldatasize == 0x20)
-PUSH1 0xXX      # (calldatsize == 0x20), destGET
-JUMPI
+36           # CALLDATASIZE | calldatasize
+60 0x20      # PUSH1        | calldatasize, 0x20
+14           # EQ           | (calldatasize == 0x20)
+60 0xXX      # PUSH1        | (calldatsize == 0x20), destGET
+57           # JUMPI        |
 
-CALLDATASIZE    # calldatasize
-PUSH1 0x40      # calldatasize, 0x40
-EQ              # (calldatasize == 0x40)
-PUSH1 0xXX      # (calldatasize == 0x40), destSET
-JUMPI           #
+36           # CALLDATASIZE | calldatasize
+60 0x40      # PUSH1 0x40   | calldatasize, 0x40
+14           # EQ           | (calldatasize == 0x40)
+60 0xXX      # PUSH1 0xXX   | (calldatasize == 0x40), destSET
+57           # JUMPI
 
-PUSH1 0xXX      # destBADDATA
-JUMP            #
+60 0xXX      # PUSH1 0xXX   | destBADDATA
+56           # JUMP
 
-JUMPDEST        ### destGET
-PUSH1 0x0       # 0x0
-CALLDATALOAD    # arg0
-SLOAD           # val0
-PUSH1 0x0       # val0, offset(0)
-MSTORE          # 
-PUSH1 0x20      # length(32)
-PUSH1 0x0       # length(32), offset(0)
-RETURN          #
+5B         ### JUMPDEST.GET
+60 0x0       # PUSH1 0x0    | 0x0
+35           # CALLDATALOAD | arg0
+54           # SLOAD        | val0
+60 0x0       # PUSH1 0x0    | PUSH1 val0, offset(0)
+52           # MSTORE       |
+60 0x20      # PUSH1 length(32)
+60 0x0       # PUSH1 0x0    | PUSH1 length(32), offset(0)
+F3           # RETURN
 
-JUMPDEST        ### destSET
-PUSH20          # owner
+5B        ### JUMPDEST.SET
+73          # PUSH20 <addr> | owner
  FF FF
  FF FF
  FF FF
@@ -41,39 +41,39 @@ PUSH20          # owner
  FF FF
  FF FF
  FF FF
-CALLER          # owner, caller
-EQ              # (owner == caller)
-NOT             # (owner != caller)
-PUSH1 0xXX      # (owner != caller), destBADCALLER
-JUMPI           #
-PUSH1 0x1       # 0x1
-CALDATALOAD     # arg1
-PUSH1 0x0       # arg1, 0x0
-CALLDATALOAD    # arg1, arg0
-                #   // TODO log2(key, val)
-                #   // likely  DUP2, DUP2, LOG2
-                # S : arg1, arg0, arg1, arg0 -> S : arg1, arg0
-SSTORE          #
-STOP            #
+33           # CALLER       | owner, caller
+14           # EQ           | (owner == caller)
+19           # NOT          | (owner != caller)
+60 0xXX      # PUSH1 0xXX   | (owner != caller), destBADCALLER
+57           # JUMPI        |
+60 0x1       # PUSH1 0x0    | 0x1
+35           # CALLDATALOAD | arg1
+60 0x0       # PUSH1 0x0    | arg1, 0x0
+35           # CALLDATALOAD | arg1, arg0
+55           # SSTORE
+             # TODO log2(key, val)
+             #     // likely  DUP2, DUP2, LOG2
+             #     S : arg1, arg0, arg1, arg0 -> S : arg1, arg0
+00           # STOP         | 
 
-JUMPDEST        ### destBADVALUE
-PUSH1 0x1       # 0x1
-PUSH1 0xXX      # 0x1, destRevert
-JUMP            # 0x1
+5B         ### destBADVALUE
+60 0x1       # PUSH1 0x1    | 0x1
+60 0xXX      # PUSH1 0xXX   | 0x1, destRevert
+56           # JUMP | 0x1
 
-JUMPDEST        ### destBADDATA
-PUSH1 0x2       # 0x2
-PUSH1 0xXX      # 0x2, destRevert
-JUMP            # 0x2
+5B         ### destBADDATA
+60 0x2       # PUSH1 0x2    | 0x2
+60 0xXX      # PUSH1 0x2    | 0x2, destRevert
+56           # JUMP | 0x2
 
-JUMPDEST        ### destBADCALLER
-PUSH1 0x2       # 0x4
-PUSH1 0xXX      # 0x4, destRevert
-JUMP            # 0x4
+5B         ### destBADCALLER
+60 0x4       # PUSH1 0x4    | 0x4
+60 0xXX      # PUSH1 0xXX   | 0x4, destRevert
+56           # JUMP | 0x4
 
-JUMPDEST        ### destREVERT  (requires: errcode)
-PUSH1 0x0       # errcode, 0x0
-MSTORE          #
-PUSH1 0x1       # 0x1
-PUSH1 0x0       # 0x1, 0x0
-REVERT          #
+5B         ### destREVERT  (requires: errcode)
+60 0x0       # PUSH1 0x0    | errcode, 0x0
+52           # MSTORE
+60 0x1       # PUSH1 0x1    | 0x1
+60 0x0       # PUSH1 0x1    | 0x1, 0x0
+FD           # REVERT
