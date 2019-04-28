@@ -1,4 +1,1 @@
-all    :; dapp build
-clean  :; dapp clean
-test   :; dapp test
-deploy :; dapp create Dmap
+all:; ./compile.sh > src/dmap.evmc
