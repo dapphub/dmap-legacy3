@@ -60,10 +60,12 @@ F3           # RETURN
 35           # CALLDATALOAD | arg1
 60 00        # PUSH1 0x00   | arg1, 0x0
 35           # CALLDATALOAD | arg1, arg0
-55           # SSTORE
-             # TODO log2(key, val)
-             #     // likely  DUP2, DUP2, LOG2
-             #     S : arg1, arg0, arg1, arg0 -> S : arg1, arg0
+81           # DUP2         | arg1, arg0, arg1
+81           # DUP2         | arg1, arg0, arg1, arg0
+60 00        # PUSH1 0x0    | arg1, arg0, arg1, arg0, 0x0
+80           # DUP1         | arg1, arg0, arg1, arg0, 0x0, 0x0
+A2           # LOG2         | arg, arg0
+55           # SSTORE       | 
 00           # STOP         | 
 
 5B         ### 
