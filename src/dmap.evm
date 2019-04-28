@@ -1,3 +1,13 @@
+### Compiler! Put the correct numbers into these words, please
+# JUMPDEST/GET
+# JUMPDEST/SET
+# JUMPDEST/BADCALLER
+# JUMPDEST/BADDATA
+# JUMPDEST/BADVALUE
+# JUMPDEST/REVERT
+# OWNER/START
+# OWNER/END
+
 60 0x0       # PUSH1        | 0x0
 34           # CALLVALUE    | 0x0, val 
 11           # GT           | (val > 0x0)
