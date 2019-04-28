@@ -2,8 +2,10 @@ A `DMap` is a contract whose storage is used directly as a mapping.
 
 To control write access, a `DMap` keep a reference to its owner *in code*. This means the owner does not take up a storage slot and cannot be modified.
 
-![A picture of a DMap](https://dapphub.github.io/dmap/dmap.png)
+`DMap`s are "bare mana" contracts, intended for use as a low-level building block, perhaps for a new language model. `DMap`s do not use the standard Solidity contract ABI.
 
+
+![A picture of a DMap](https://dapphub.github.io/dmap/dmap.png)
 
 
 ### Semantics
