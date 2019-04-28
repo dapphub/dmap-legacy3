@@ -1,0 +1,27 @@
+PUSH1 0x0       # 0x0
+VALUE           # 0x0, val 
+GT              # (val > 0x0)
+PUSH1 0xXX      # (val > 0x0), destBADVALUE
+JUMPI           #
+
+# jumpif calldata.length == 0, to destSenderOwner
+# jumpif calldata.length == 32, to destCustomOwner
+# jump, to destBADDATA
+
+# destCustomOwner
+# jump destBUILD
+
+# destSenderOwner
+# jump destBUILD
+
+# destBUILD
+#  mask 12+20: (tag, address)
+#  create
+#  log
+# return
+
+# destBADDATA
+# fail with error
+
+# destBADVALUE
+# fail with error
