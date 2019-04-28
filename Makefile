@@ -1,1 +1,1 @@
-all:; ./compile.sh > src/dmap.evmc
+all:; ./compile.sh > bin/dmap.evmc
