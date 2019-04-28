@@ -2,12 +2,11 @@
 # DEST.GET          LL
 # DEST.SET          MM
 # DEST.BADCALLER    NN
-# DEST.BADDATA      OO
-# DEST.BADVALUE     PP
-# DEST.REVERT       QQ
-# OWNER/START
-# OWNER/END
+# DEST.BADDATA      PP
+# DEST.BADVALUE     QQ
+# DEST.REVERT       RR
 
+# Reject Ether
 60 00        # PUSH1        | 0x0
 34           # CALLVALUE    | 0x0, val 
 11           # GT           | (val > 0x0)
@@ -23,10 +22,10 @@
 36           # CALLDATASIZE | calldatasize
 60 40        # PUSH1 0x40   | calldatasize, 0x40
 14           # EQ           | (calldatasize == 0x40)
-60 XX        # PUSH1 0xXX   | (calldatasize == 0x40), DEST.SET
+60 MM        # PUSH1 0xMM   | (calldatasize == 0x40), DEST.SET
 57           # JUMPI
 
-60 OO        # PUSH1 0xXX   | DEST.BADDATA
+60 PP        # PUSH1 0xPP   | DEST.BADDATA
 56           # JUMP
 
 5B         ### DEST.GET
@@ -70,17 +69,17 @@ A2           # LOG2         | arg, arg0
 
 5B         ### 
 60 01        # PUSH1 0x0    | 0x1
-60 QQ        # PUSH1 0xQQ   | 0x1, DEST.REVERT
+60 RR        # PUSH1 0xRR   | 0x1, DEST.REVERT
 56           # JUMP         | 0x1
 
 5B         ### DEST.BADDATA
 60 02       # PUSH1 0x2    | 0x2
-60 QQ       # PUSH1 0xXX   | 0x2, DEST.REVERT
+60 RR       # PUSH1 0xRR   | 0x2, DEST.REVERT
 56          # JUMP         | 0x2
 
 5B         ### DEST.BADCALLER
 60 04        # PUSH1 0x4    | 0x4
-60 QQ        # PUSH1 0xXX   | 0x4, DEST.REVERT
+60 RR        # PUSH1 0xRR   | 0x4, DEST.REVERT
 56           # JUMP         | 0x4
 
 5B         ### DEST.REVERT  (requires: errcode)

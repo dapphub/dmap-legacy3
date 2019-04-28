@@ -1,8 +1,15 @@
-PUSH1 0x0       # 0x0
-VALUE           # 0x0, val 
-GT              # (val > 0x0)
-PUSH1 0xXX      # (val > 0x0), destBADVALUE
-JUMPI           #
+# DEST.BADVALUE     VV   reverts
+# DEST.BADDATA      WW   reverts
+# DEST.SENDEROWNER  XX
+# DEST.CUSTOMOWNER  YY
+# DEST.BUILD        ZZ
+
+# Reject ether
+60 00           # PUSH1 0x00    | 0x00
+34              # CALLVALUE     | 0x00, val 
+11              # GT            | (val > 0x0)
+60 VV           # PUSH1 VV      | (val > 0x0), DEST.BADVALUE
+67              # JUMPI         |
 
 # jumpif calldata.length == 0, to destSenderOwner
 # jumpif calldata.length == 32, to destCustomOwner
